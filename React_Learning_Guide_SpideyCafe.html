@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>React Mastery Guide — SpideyCafe Pitstop Project</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@700;800&display=swap');
+
+  :root {
+    --espresso: #2A1B16;
+    --terracotta: #D96136;
+    --cream: #FAF7F2;
+    --border: #EFE8DD;
+    --text-muted: #9E8E85;
+    --green: #059669;
+    --blue: #2563EB;
+    --yellow: #D97706;
+    --red: #DC2626;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--espresso);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    background: linear-gradient(135deg, #2A1B16 0%, #4A2F20 40%, #D96136 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    page-break-after: always;
+  }
+  .cover .badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    padding: 0.4rem 1.2rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    display: inline-block;
+  }
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .cover h1 span { color: #FFD700; }
+  .cover .subtitle {
+    font-size: 1.2rem;
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+  }
+  .cover .meta-row {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .cover .meta-item {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+  }
+  .cover .meta-item strong { display: block; font-size: 1.4rem; font-weight: 800; }
+  .cover .meta-item span { font-size: 0.78rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+  .cover .project-tag {
+    background: rgba(255,215,0,0.15);
+    border: 1px solid rgba(255,215,0,0.4);
+    color: #FFD700;
+    padding: 0.6rem 1.8rem;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    page-break-after: always;
+  }
+  .toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--espresso);
+    margin-bottom: 0.5rem;
+  }
+  .toc .toc-intro { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem; }
+  .toc-section {
+    margin-bottom: 1.5rem;
+  }
+  .toc-section-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0;
+    border-bottom: 1px dotted var(--border);
+    font-size: 0.9rem;
+  }
+  .toc-item .toc-num {
+    background: var(--espresso);
+    color: #fff;
+    border-radius: 6px;
+    padding: 1px 7px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-right: 0.6rem;
+  }
+  .toc-item .level-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+  .level-beginner { background: #D1FAE5; color: #047857; }
+  .level-intermediate { background: #FEF3C7; color: #B45309; }
+  .level-advanced { background: #FEE2E2; color: #B91C1C; }
+  .level-pro { background: #EDE9FE; color: #5B21B6; }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 860px; margin: 0 auto; padding: 2rem; }
+
+  /* ── CHAPTER HEADER ── */
+  .chapter {
+    page-break-before: always;
+    margin-bottom: 4rem;
+  }
+  .chapter-number {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 0.5rem;
+  }
+  .chapter h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--espresso);
+    margin-bottom: 0.5rem;
+    line-height: 1.25;
+  }
+  .chapter-meta {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .chapter-divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--terracotta), transparent);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+
+  /* ── CONCEPT CARD ── */
+  .concept {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(42,27,22,0.06);
+  }
+  .concept-header {
+    background: linear-gradient(135deg, var(--espresso), #4A2F20);
+    color: #fff;
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .concept-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .concept-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .concept-subtitle { font-size: 0.8rem; opacity: 0.75; }
+
+  .concept-body { padding: 1.5rem; }
+
+  /* ── DEFINITION BOX ── */
+  .definition {
+    background: linear-gradient(135deg, #FFF8F5, #FFF3EE);
+    border-left: 4px solid var(--terracotta);
+    border-radius: 0 10px 10px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .definition-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 0.4rem;
+  }
+  .definition p { font-size: 0.92rem; color: #4A2F20; line-height: 1.65; }
+
+  /* ── FILE REFERENCE ── */
+  .file-ref {
+    background: #F0FDF4;
+    border: 1px solid #A7F3D0;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #047857;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .file-ref::before { content: '📁'; }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #1E1413;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid #3A2520;
+  }
+  .code-header {
+    background: #2A1B16;
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .code-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: #D9CFC4;
+  }
+  .code-lang {
+    font-size: 0.7rem;
+    background: rgba(217,97,54,0.3);
+    color: #FFB088;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .code-block pre {
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: #E8DDD8;
+  }
+  /* Syntax highlighting colors */
+  .kw { color: #C792EA; } /* keywords: import, export, const, function, return */
+  .fn { color: #82AAFF; } /* function names */
+  .str { color: #C3E88D; } /* strings */
+  .cm { color: #546E7A; font-style: italic; } /* comments */
+  .num { color: #F78C6C; } /* numbers */
+  .jsx { color: #80CBC4; } /* JSX tags */
+  .attr { color: #FFCB6B; } /* attributes */
+  .hook { color: #FF5370; } /* hooks */
+  .var { color: #EEFFFF; } /* variables */
+
+  /* ── VISUAL DIAGRAM ── */
+  .diagram {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--espresso);
+    white-space: nowrap;
+  }
+  .flow-box.active { background: var(--terracotta); color: #fff; border-color: var(--terracotta); }
+  .flow-arrow { color: var(--text-muted); font-size: 1.2rem; font-weight: 700; }
+
+  /* ── KEY POINTS ── */
+  .key-points {
+    background: #F0F9FF;
+    border: 1px solid #BAE6FD;
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .key-points-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #0369A1;
+    margin-bottom: 0.65rem;
+  }
+  .key-points ul { list-style: none; }
+  .key-points li {
+    font-size: 0.875rem;
+    color: #0C4A6E;
+    padding: 0.3rem 0;
+    padding-left: 1.4rem;
+    position: relative;
+  }
+  .key-points li::before {
+    content: '✅';
+    position: absolute;
+    left: 0;
+    font-size: 0.75rem;
+    top: 0.32rem;
+  }
+
+  /* ── WARNING / TIP BOX ── */
+  .warning {
+    background: #FFF7ED;
+    border: 1px solid #FED7AA;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    color: #7C2D12;
+  }
+  .warning strong { color: #9A3412; }
+
+  .tip {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    color: #14532D;
+  }
+  .tip strong { color: #166534; }
+
+  /* ── EXERCISE ── */
+  .exercise {
+    background: linear-gradient(135deg, #EDE9FE, #F5F3FF);
+    border: 1px solid #C4B5FD;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .exercise-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5B21B6;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .exercise-title::before { content: '🎯'; }
+  .exercise ol { padding-left: 1.3rem; }
+  .exercise li { font-size: 0.875rem; color: #3B1F6E; margin-bottom: 0.35rem; }
+
+  /* ── SECTION SEPARATOR ── */
+  .section-sep {
+    height: 1px;
+    background: var(--border);
+    margin: 2.5rem 0;
+  }
+
+  /* ── ARCHITECTURE ── */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .arch-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .arch-card .arch-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  .arch-card .arch-name { font-size: 0.8rem; font-weight: 700; color: var(--espresso); margin-bottom: 0.2rem; }
+  .arch-card .arch-desc { font-size: 0.72rem; color: var(--text-muted); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+  }
+  .compare-table th {
+    background: var(--espresso);
+    color: #fff;
+    padding: 0.65rem 1rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+  .compare-table td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .compare-table tr:nth-child(even) td { background: var(--cream); }
+  .compare-table td code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background: #F4EFE6;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--terracotta);
+  }
+
+  /* ── ROADMAP ── */
+  .roadmap {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--terracotta), var(--espresso));
+  }
+  .roadmap-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  .roadmap-item::before {
+    content: '';
+    position: absolute;
+    left: -2.05rem;
+    top: 0.4rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    border: 2px solid var(--cream);
+  }
+  .roadmap-item h4 { font-size: 0.9rem; font-weight: 700; color: var(--espresso); margin-bottom: 0.2rem; }
+  .roadmap-item p { font-size: 0.82rem; color: var(--text-muted); }
+
+  /* ── PRINT CONTROL ── */
+  @media print {
+    .cover { page-break-after: always; }
+    .chapter { page-break-before: always; }
+    .concept { page-break-inside: avoid; }
+    body { font-size: 13px; }
+    .code-block pre { font-size: 0.74rem; }
+  }
+
+  /* ── INLINE CODE ── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    background: #F4EFE6;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--terracotta);
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--espresso);
+    margin: 1.25rem 0 0.6rem;
+  }
+  p { margin-bottom: 0.75rem; }
+
+  .highlight-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .highlight-pill {
+    background: #F4EFE6;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--espresso);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     COVER PAGE
+════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="badge">☕ Real Project · Beginner to Pro</div>
+  <h1>React Mastery Guide<br><span>SpideyCafe Pitstop</span></h1>
+  <p class="subtitle">
+    Learn every React concept—from JSX basics to Context API, Custom Hooks, React Router, and async data fetching—using real code from a full-stack QR Table Ordering system built with React 19 + Vite.
+  </p>
+  <div class="meta-row">
+    <div class="meta-item">
+      <strong>12</strong>
+      <span>Core Concepts</span>
+    </div>
+    <div class="meta-item">
+      <strong>50+</strong>
+      <span>Real Code Examples</span>
+    </div>
+    <div class="meta-item">
+      <strong>4</strong>
+      <span>Skill Levels</span>
+    </div>
+    <div class="meta-item">
+      <strong>36</strong>
+      <span>Project Files</span>
+    </div>
+  </div>
+  <div class="project-tag">🚀 Based on: SpideyCafe Pitstop — QR Table Ordering System</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════════════════════ -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <p class="toc-intro">Each concept is taught using real code extracted directly from the SpideyCafe Pitstop project. Follow the learning path level-by-level.</p>
+
+  <div class="toc-section">
+    <div class="toc-section-title">🌱 Level 1 — Beginner</div>
+    <div class="toc-item"><span><span class="toc-num">01</span> Project Architecture Overview</span><span class="level-badge level-beginner">Beginner</span></div>
+    <div class="toc-item"><span><span class="toc-num">02</span> JSX — Writing HTML in JavaScript</span><span class="level-badge level-beginner">Beginner</span></div>
+    <div class="toc-item"><span><span class="toc-num">03</span> React Components — Functions That Return UI</span><span class="level-badge level-beginner">Beginner</span></div>
+    <div class="toc-item"><span><span class="toc-num">04</span> Props — Passing Data Between Components</span><span class="level-badge level-beginner">Beginner</span></div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title">🔥 Level 2 — Intermediate</div>
+    <div class="toc-item"><span><span class="toc-num">05</span> useState Hook — Component State Management</span><span class="level-badge level-intermediate">Intermediate</span></div>
+    <div class="toc-item"><span><span class="toc-num">06</span> useEffect Hook — Side Effects & Lifecycle</span><span class="level-badge level-intermediate">Intermediate</span></div>
+    <div class="toc-item"><span><span class="toc-num">07</span> Event Handling — Forms, Clicks & Inputs</span><span class="level-badge level-intermediate">Intermediate</span></div>
+    <div class="toc-item"><span><span class="toc-num">08</span> Conditional Rendering — UI Logic</span><span class="level-badge level-intermediate">Intermediate</span></div>
+    <div class="toc-item"><span><span class="toc-num">09</span> List Rendering — Arrays & Keys</span><span class="level-badge level-intermediate">Intermediate</span></div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title">⚡ Level 3 — Advanced</div>
+    <div class="toc-item"><span><span class="toc-num">10</span> React Router v7 — Pages, Navigation & URL Params</span><span class="level-badge level-advanced">Advanced</span></div>
+    <div class="toc-item"><span><span class="toc-num">11</span> Context API — Global State Management</span><span class="level-badge level-advanced">Advanced</span></div>
+    <div class="toc-item"><span><span class="toc-num">12</span> Custom Hooks — Reusable Logic</span><span class="level-badge level-advanced">Advanced</span></div>
+  </div>
+
+  <div class="toc-section">
+    <div class="toc-section-title">🎓 Level 4 — Pro</div>
+    <div class="toc-item"><span><span class="toc-num">13</span> useCallback & Performance Optimization</span><span class="level-badge level-pro">Pro</span></div>
+    <div class="toc-item"><span><span class="toc-num">14</span> Async Data Fetching & Service Layer Architecture</span><span class="level-badge level-pro">Pro</span></div>
+    <div class="toc-item"><span><span class="toc-num">15</span> localStorage Persistence & State Initialization</span><span class="level-badge level-pro">Pro</span></div>
+    <div class="toc-item"><span><span class="toc-num">16</span> Layouts, Outlets & Component Composition</span><span class="level-badge level-pro">Pro</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN LEARNING CONTENT
+════════════════════════════════════════════════════════ -->
+<div class="main">
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 0 — ARCHITECTURE
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Overview</div>
+  <h2>Understanding the SpideyCafe Project Architecture</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-beginner">Beginner</span>
+    <span style="font-size:0.82rem;color:var(--text-muted);">Read this first — it's your map of everything!</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🗺️</div>
+      <div>
+        <div class="concept-title">What is SpideyCafe Pitstop?</div>
+        <div class="concept-subtitle">A full React application — QR-based table ordering for a café</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">What You're Learning From</div>
+        <p>SpideyCafe Pitstop is a real-world <strong>QR Table Ordering System</strong> built for a café. Customers scan a QR code at their table, browse the menu, add items to cart, checkout, and see their order status. Staff see a live Admin Dashboard. The frontend is built entirely in <strong>React 19 + Vite</strong>.</p>
+      </div>
+
+      <div class="arch-grid">
+        <div class="arch-card"><div class="arch-icon">📄</div><div class="arch-name">Pages (5)</div><div class="arch-desc">MenuPage, CartPage, CheckoutPage, OrderConfirmation, AdminDashboard</div></div>
+        <div class="arch-card"><div class="arch-icon">🧩</div><div class="arch-name">Components (14)</div><div class="arch-desc">MenuItemCard, Navbar, Toast, OrderCard, ConfirmModal, etc.</div></div>
+        <div class="arch-card"><div class="arch-icon">🎣</div><div class="arch-name">Hooks (3)</div><div class="arch-desc">useCart, useOrders, useTableNumber — reusable logic</div></div>
+        <div class="arch-card"><div class="arch-icon">🌐</div><div class="arch-name">Context (1)</div><div class="arch-desc">OrderContext — global state for cart + orders + toast</div></div>
+        <div class="arch-card"><div class="arch-icon">⚙️</div><div class="arch-name">Services (4)</div><div class="arch-desc">menuService, orderService, storageService, apiConfig</div></div>
+        <div class="arch-card"><div class="arch-icon">🛠️</div><div class="arch-name">Utils (3)</div><div class="arch-desc">formatters, orderUtils, razorpay</div></div>
+      </div>
+
+      <div class="diagram">
+        <strong style="display:block;margin-bottom:1rem;color:var(--espresso);">How Data Flows Through the App</strong>
+        <div class="flow">
+          <div class="flow-box">User scans QR</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box active">MenuPage</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Adds to Cart</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box active">OrderContext</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">CartPage</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box active">CheckoutPage</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">OrderConfirmation</div>
+        </div>
+        <div style="margin-top:1rem;font-size:0.8rem;color:var(--text-muted);">Staff → AdminDashboard → Updates Order Status → Customer sees it via Refresh</div>
+      </div>
+
+      <div class="file-ref">Project root: src/ → components/ · context/ · hooks/ · pages/ · services/ · utils/</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 1 — JSX
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 01 — Level: Beginner</div>
+  <h2>JSX — Writing HTML Inside JavaScript</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-beginner">Beginner</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🖊️</div>
+      <div>
+        <div class="concept-title">What is JSX?</div>
+        <div class="concept-subtitle">Syntax extension that looks like HTML but compiles to JavaScript</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong>JSX (JavaScript XML)</strong> is a syntax that lets you write HTML-like code directly inside JavaScript. React components return JSX. Vite (via Babel/esbuild) converts JSX into <code>React.createElement()</code> calls behind the scenes. Every opening tag must be closed, you use <code>className</code> instead of <code>class</code>, and JavaScript expressions go inside <code>{ }</code> curly braces.</p>
+      </div>
+
+      <div class="file-ref">src/components/common/Toast.jsx — simple JSX component</div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">Toast.jsx</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">// JSX lets us mix HTML structure with JavaScript logic</span>
+<span class="kw">export function</span> <span class="fn">Toast</span>() {
+  <span class="kw">const</span> <span class="var">toast</span> = { type: <span class="str">'success'</span>, message: <span class="str">'Order Placed!'</span> };
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div</span>          <span class="cm">// ← JSX element (looks like HTML)</span>
+      <span class="attr">style</span>=<span class="str">{{</span>     <span class="cm">// ← double {{ }} for JS object inside JSX</span>
+        <span class="attr">position</span>: <span class="str">'fixed'</span>,
+        <span class="attr">bottom</span>: <span class="str">'24px'</span>,
+        <span class="attr">right</span>: <span class="str">'24px'</span>,
+        <span class="attr">backgroundColor</span>: <span class="str">'#FFFFFF'</span>,
+        <span class="attr">borderRadius</span>: <span class="str">'12px'</span>,
+        <span class="attr">padding</span>: <span class="str">'12px 18px'</span>,
+      <span class="str">}}</span>
+    <span class="jsx">&gt;</span>
+      <span class="cm">{/* ← JSX comment */}</span>
+      <span class="jsx">&lt;span&gt;</span>{toast.message}<span class="jsx">&lt;/span&gt;</span>  <span class="cm">// ← JS expression in { }</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <h3>JSX Rules You Must Know</h3>
+      <table class="compare-table">
+        <tr><th>Rule</th><th>HTML (old)</th><th>JSX (React)</th></tr>
+        <tr><td>CSS class</td><td><code>class="btn"</code></td><td><code>className="btn"</code></td></tr>
+        <tr><td>Self-closing</td><td><code>&lt;img&gt;</code></td><td><code>&lt;img /&gt;</code></td></tr>
+        <tr><td>Inline style</td><td><code>style="color:red"</code></td><td><code>style={{ color: 'red' }}</code></td></tr>
+        <tr><td>JS expression</td><td>Not possible</td><td><code>{variable}</code></td></tr>
+        <tr><td>Event handler</td><td><code>onclick="fn()"</code></td><td><code>onClick={fn}</code></td></tr>
+        <tr><td>Comment</td><td><code>&lt;!-- --&gt;</code></td><td><code>{/* */}</code></td></tr>
+      </table>
+
+      <div class="file-ref">src/pages/CartPage.jsx — real JSX with expressions &amp; styling</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">CartPage.jsx — JSX expressions</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="jsx">&lt;h2</span>
+  <span class="attr">style</span>=<span class="str">{{</span>
+    <span class="attr">fontFamily</span>: <span class="str">'var(--font-heading)'</span>,
+    <span class="attr">fontSize</span>: <span class="str">'2rem'</span>,
+    <span class="attr">color</span>: <span class="str">'var(--brand-espresso)'</span>,
+  <span class="str">}}</span>
+<span class="jsx">&gt;</span>
+  Your Selected Dishes (Table {tableNumber})  <span class="cm">{/* JS variable in JSX */}</span>
+<span class="jsx">&lt;/h2&gt;</span>
+
+<span class="cm">{/* Ternary expression — shows different UI based on condition */}</span>
+{isEmpty ? (
+  <span class="jsx">&lt;p&gt;</span>Cart is empty<span class="jsx">&lt;/p&gt;</span>
+) : (
+  <span class="jsx">&lt;p&gt;</span>You have items!<span class="jsx">&lt;/p&gt;</span>
+)}</pre>
+      </div>
+
+      <div class="key-points">
+        <div class="key-points-title">🔑 Key Takeaways</div>
+        <ul>
+          <li>JSX must return ONE root element — wrap siblings in <code>&lt;&gt;&lt;/&gt;</code> (Fragment)</li>
+          <li>Use <code>className</code> not <code>class</code> — it's JavaScript</li>
+          <li>Inline styles are JavaScript objects: <code>style={{ color: 'red' }}</code></li>
+          <li>Embed any JavaScript expression inside <code>{ }</code></li>
+          <li>JSX is NOT required but it makes React much easier to read</li>
+        </ul>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/components/common/Toast.jsx</code></li>
+          <li>Change the border-radius from <code>'12px'</code> to <code>'4px'</code> and see how JSX style changes affect the UI</li>
+          <li>Add a new <code>&lt;p&gt;</code> tag that shows the current time using <code>{new Date().toLocaleTimeString()}</code></li>
+          <li>Try writing <code>class="btn"</code> instead of <code>className</code> and see the warning React gives you</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 2 — COMPONENTS
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 02 — Level: Beginner</div>
+  <h2>React Components — Functions That Return UI</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-beginner">Beginner</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🧩</div>
+      <div>
+        <div class="concept-title">Function Components</div>
+        <div class="concept-subtitle">The fundamental building block of every React application</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p>A <strong>React Component</strong> is a JavaScript function that returns JSX. Components let you split the UI into independent, reusable pieces. Each component has its own logic and appearance. Component names <em>must start with a capital letter</em> so React can distinguish them from regular HTML tags. In SpideyCafe, we have <strong>29+ components</strong>, from tiny <code>VegBadge</code> to the full <code>CheckoutPage</code>.</p>
+      </div>
+
+      <div class="file-ref">src/components/common/VegBadge.jsx — the smallest component in the project</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">VegBadge.jsx — Simplest component</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">import</span> React <span class="kw">from</span> <span class="str">'react'</span>;
+
+<span class="cm">// A component = a function that returns JSX</span>
+<span class="kw">export function</span> <span class="fn">VegBadge</span>({ isVeg, size = <span class="str">'md'</span> }) {
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div</span>
+      <span class="attr">style</span>=<span class="str">{{</span>
+        <span class="attr">width</span>: size === <span class="str">'sm'</span> ? <span class="str">'14px'</span> : <span class="str">'18px'</span>,
+        <span class="attr">height</span>: size === <span class="str">'sm'</span> ? <span class="str">'14px'</span> : <span class="str">'18px'</span>,
+        <span class="attr">borderRadius</span>: <span class="str">'3px'</span>,
+        <span class="attr">border</span>: <span class="str">`2px solid <span class="var">${isVeg ? '#16A34A' : '#DC2626'}</span>`</span>,
+        <span class="attr">display</span>: <span class="str">'flex'</span>,
+        <span class="attr">alignItems</span>: <span class="str">'center'</span>,
+        <span class="attr">justifyContent</span>: <span class="str">'center'</span>,
+      <span class="str">}}</span>
+    <span class="jsx">&gt;</span>
+      <span class="jsx">&lt;div</span>
+        <span class="attr">style</span>=<span class="str">{{</span>
+          <span class="attr">width</span>: <span class="str">'8px'</span>,
+          <span class="attr">height</span>: <span class="str">'8px'</span>,
+          <span class="attr">borderRadius</span>: <span class="str">'50%'</span>,
+          <span class="attr">backgroundColor</span>: isVeg ? <span class="str">'#16A34A'</span> : <span class="str">'#DC2626'</span>,
+        <span class="str">}}</span>
+      <span class="jsx">/&gt;</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <h3>How Components Compose — The MenuItemCard Example</h3>
+      <p>Components are like LEGO bricks. <code>MenuItemCard</code> uses <code>VegBadge</code> inside it, and <code>MenuPage</code> uses <code>MenuItemCard</code> inside it.</p>
+
+      <div class="file-ref">src/components/menu/MenuItemCard.jsx — component using sub-components</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">MenuItemCard.jsx — Component Composition</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">import</span> { <span class="var">VegBadge</span> } <span class="kw">from</span> <span class="str">'../common/VegBadge'</span>; <span class="cm">// ← import sub-component</span>
+
+<span class="kw">export function</span> <span class="fn">MenuItemCard</span>({ item }) {   <span class="cm">// ← receives "item" as prop</span>
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div</span> <span class="attr">style</span>=<span class="str">{{ borderRadius: '12px', overflow: 'hidden' }}</span><span class="jsx">&gt;</span>
+
+      <span class="cm">{/* Food Image */}</span>
+      <span class="jsx">&lt;img</span> <span class="attr">src</span>={item.image} <span class="attr">alt</span>={item.name} <span class="jsx">/&gt;</span>
+
+      <span class="cm">{/* ↓ VegBadge is a CHILD component rendered here */}</span>
+      <span class="jsx">&lt;VegBadge</span> <span class="attr">isVeg</span>={item.isVeg} <span class="attr">size</span>=<span class="str">"sm"</span> <span class="jsx">/&gt;</span>
+
+      <span class="jsx">&lt;h3&gt;</span>{item.name}<span class="jsx">&lt;/h3&gt;</span>
+      <span class="jsx">&lt;p&gt;</span>{item.description}<span class="jsx">&lt;/p&gt;</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}
+
+<span class="cm">// Used in MenuPage like this:</span>
+<span class="cm">// &lt;MenuItemCard key={item.id} item={item} /&gt;</span></pre>
+      </div>
+
+      <div class="diagram">
+        <strong style="display:block;margin-bottom:0.75rem;">Component Tree — SpideyCafe Customer View</strong>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;text-align:left;display:inline-block;background:#fff;padding:1rem;border-radius:8px;border:1px solid var(--border);">
+          App<br>
+          &nbsp;&nbsp;└─ BrowserRouter<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ OrderProvider (Context)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ CustomerLayout<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Navbar<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ MenuPage (Outlet)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;├─ MenuHeader<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;├─ SearchBar<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;├─ CategoryFilter<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;└─ MenuItemCard × N<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ VegBadge<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ Toast
+        </div>
+      </div>
+
+      <div class="key-points">
+        <div class="key-points-title">🔑 Key Takeaways</div>
+        <ul>
+          <li>Component names MUST start with a capital letter: <code>MenuItemCard</code>, not <code>menuItemCard</code></li>
+          <li>Every component returns JSX (or <code>null</code> to render nothing)</li>
+          <li>Components can use other components inside them — this is <em>composition</em></li>
+          <li>Keep components small and focused on one thing (Single Responsibility)</li>
+          <li>Use named exports: <code>export function MyComponent()</code> — easier to refactor</li>
+        </ul>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/components/common/VegBadge.jsx</code> — this is the simplest component</li>
+          <li>Create a new component <code>PriceBadge.jsx</code> that takes a <code>price</code> prop and displays it with a ₹ symbol</li>
+          <li>Use <code>PriceBadge</code> inside <code>MenuItemCard.jsx</code> where price is displayed</li>
+          <li>Notice how composition keeps each piece small and reusable</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 3 — PROPS
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 03 — Level: Beginner</div>
+  <h2>Props — Passing Data Between Components</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-beginner">Beginner</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">📦</div>
+      <div>
+        <div class="concept-title">Props (Properties)</div>
+        <div class="concept-subtitle">The way parent components send data down to child components</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong>Props</strong> (short for properties) are the arguments you pass to a React component — like function parameters. Props flow <em>one way</em>: from <strong>parent → child</strong>. A child component cannot modify its own props; props are read-only. In SpideyCafe, <code>MenuItemCard</code> receives the menu <code>item</code> object as a prop, <code>ConfirmModal</code> receives <code>isOpen</code>, <code>title</code>, <code>message</code>, and callback functions as props.</p>
+      </div>
+
+      <div class="file-ref">src/components/common/ConfirmModal.jsx — excellent props example with defaults</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">ConfirmModal.jsx — Props with default values</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">// Props are destructured from the function parameter</span>
+<span class="kw">export function</span> <span class="fn">ConfirmModal</span>({
+  isOpen,                        <span class="cm">// ← boolean prop</span>
+  title = <span class="str">'Confirm Action'</span>,     <span class="cm">// ← prop with DEFAULT value</span>
+  message,                       <span class="cm">// ← string prop</span>
+  confirmLabel = <span class="str">'Confirm'</span>,     <span class="cm">// ← default label</span>
+  cancelLabel = <span class="str">'Cancel'</span>,       <span class="cm">// ← default label</span>
+  isDanger = <span class="num">false</span>,            <span class="cm">// ← boolean with default</span>
+  onConfirm,                     <span class="cm">// ← function prop (callback)</span>
+  onCancel,                      <span class="cm">// ← function prop (callback)</span>
+}) {
+  <span class="kw">if</span> (!isOpen) <span class="kw">return</span> <span class="num">null</span>;  <span class="cm">// ← prop controls visibility</span>
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div</span>  <span class="cm">{/* modal overlay */}</span><span class="jsx">&gt;</span>
+      <span class="jsx">&lt;h3&gt;</span>{title}<span class="jsx">&lt;/h3&gt;</span>                <span class="cm">{/* use the prop */}</span>
+      <span class="jsx">&lt;p&gt;</span>{message}<span class="jsx">&lt;/p&gt;</span>
+
+      <span class="jsx">&lt;button</span>
+        <span class="attr">onClick</span>={onConfirm}             <span class="cm">{/* call the function prop */}</span>
+        <span class="attr">style</span>=<span class="str">{{</span>
+          <span class="attr">backgroundColor</span>: isDanger ? <span class="str">'#DC2626'</span> : <span class="str">'var(--brand-terracotta)'</span>,
+        <span class="str">}}</span>
+      <span class="jsx">&gt;</span>
+        {confirmLabel}
+      <span class="jsx">&lt;/button&gt;</span>
+
+      <span class="jsx">&lt;button</span> <span class="attr">onClick</span>={onCancel}<span class="jsx">&gt;</span>{cancelLabel}<span class="jsx">&lt;/button&gt;</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <h3>How OrderCard Uses ConfirmModal with Props</h3>
+      <div class="file-ref">src/components/admin/OrderCard.jsx — passing props to ConfirmModal</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">OrderCard.jsx — Passing props to child</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">// Parent component passes values as props to the child</span>
+<span class="jsx">&lt;ConfirmModal</span>
+  <span class="attr">isOpen</span>={isCancelModalOpen}                        <span class="cm">{/* boolean prop */}</span>
+  <span class="attr">title</span>=<span class="str">"Cancel Order"</span>                             <span class="cm">{/* string prop */}</span>
+  <span class="attr">message</span>=<span class="str">{`Are you sure you want to cancel Order #${order.id}?`}</span>
+  <span class="attr">confirmLabel</span>=<span class="str">"Yes, Cancel Order"</span>
+  <span class="attr">cancelLabel</span>=<span class="str">"No, Keep Order"</span>
+  <span class="attr">isDanger</span>={<span class="num">true</span>}                                   <span class="cm">{/* boolean prop */}</span>
+  <span class="attr">onConfirm</span>={handleConfirmCancel}                   <span class="cm">{/* function prop */}</span>
+  <span class="attr">onCancel</span>={() => setIsCancelModalOpen(<span class="num">false</span>)}       <span class="cm">{/* inline function */}</span>
+<span class="jsx">/&gt;</span></pre>
+      </div>
+
+      <div class="key-points">
+        <div class="key-points-title">🔑 Key Takeaways</div>
+        <ul>
+          <li>Props flow <strong>parent → child only</strong> (one-way data flow)</li>
+          <li>Props are read-only — never mutate them inside a child component</li>
+          <li>Use <code>= defaultValue</code> in destructuring for optional props</li>
+          <li>Functions can be props too — that's how children communicate back up (callbacks)</li>
+          <li>Use <code>children</code> prop to nest JSX content inside a component</li>
+        </ul>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/components/admin/StatsHeader.jsx</code></li>
+          <li>It receives <code>orders</code> as a prop — find where it's called and see what's passed</li>
+          <li>Add a new prop <code>title</code> to <code>StatsHeader</code> with a default value of "Today's Overview"</li>
+          <li>Render the <code>title</code> prop at the top of the component's output</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 4 — useState
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 04 — Level: Intermediate</div>
+  <h2>useState Hook — Managing Component State</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-intermediate">Intermediate</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🔄</div>
+      <div>
+        <div class="concept-title">useState</div>
+        <div class="concept-subtitle">Gives your component memory — data that changes and triggers re-renders</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong><code>useState</code></strong> is a React Hook that lets your component remember values between renders. When state changes, React <em>re-renders</em> (re-runs) the component so the UI reflects the latest data. It returns a pair: <code>[currentValue, setterFunction]</code>. You <strong>never</strong> directly mutate state — always use the setter. SpideyCafe uses <code>useState</code> extensively: for cart items, search terms, active category, form fields, modal open/close, etc.</p>
+      </div>
+
+      <div class="file-ref">src/pages/MenuPage.jsx — multiple useState in one component</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">MenuPage.jsx — useState examples</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">import</span> React, { <span class="hook">useState</span>, useEffect } <span class="kw">from</span> <span class="str">'react'</span>;
+
+<span class="kw">export function</span> <span class="fn">MenuPage</span>() {
+  <span class="cm">// [currentValue, setterFunction] = useState(initialValue)</span>
+
+  <span class="kw">const</span> [menuItems, setMenuItems]           = <span class="hook">useState</span>([]);
+  <span class="cm">//    ↑ array of menu items    ↑ function to update it   ↑ starts empty</span>
+
+  <span class="kw">const</span> [loading, setLoading]               = <span class="hook">useState</span>(<span class="num">true</span>);
+  <span class="cm">//    ↑ boolean                                          ↑ starts true</span>
+
+  <span class="kw">const</span> [activeCategory, setActiveCategory] = <span class="hook">useState</span>(<span class="str">'all'</span>);
+  <span class="cm">//    ↑ selected category tab                           ↑ starts 'all'</span>
+
+  <span class="kw">const</span> [searchTerm, setSearchTerm]         = <span class="hook">useState</span>(<span class="str">''</span>);
+  <span class="cm">//    ↑ what user typed in search box                   ↑ starts empty</span>
+
+  <span class="cm">// When user clicks a category button, we call the setter:</span>
+  <span class="cm">// setActiveCategory('coffees')  ← this triggers a re-render</span>
+
+  <span class="cm">// Derived state — computed from existing state (no useState needed)</span>
+  <span class="kw">const</span> filteredItems = menuItems.<span class="fn">filter</span>((item) => {
+    <span class="kw">const</span> matchesCategory = activeCategory === <span class="str">'all'</span> || item.category === activeCategory;
+    <span class="kw">const</span> matchesSearch   = item.name.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(searchTerm.<span class="fn">toLowerCase</span>());
+    <span class="kw">return</span> matchesCategory &amp;&amp; matchesSearch;
+  });
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div&gt;</span>
+      <span class="cm">{/* Pass state down as props */}</span>
+      <span class="jsx">&lt;SearchBar</span>
+        <span class="attr">searchTerm</span>={searchTerm}
+        <span class="attr">setSearchTerm</span>={setSearchTerm}    <span class="cm">{/* pass setter as prop */}</span>
+      <span class="jsx">/&gt;</span>
+      <span class="jsx">&lt;CategoryFilter</span>
+        <span class="attr">activeCategory</span>={activeCategory}
+        <span class="attr">onSelectCategory</span>={setActiveCategory}  <span class="cm">{/* setter as callback prop */}</span>
+      <span class="jsx">/&gt;</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <h3>Checkbox / Modal Pattern — useState for UI State</h3>
+      <div class="file-ref">src/components/admin/OrderCard.jsx — modal open/close with useState</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">OrderCard.jsx — boolean useState</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">export function</span> <span class="fn">OrderCard</span>({ order, onUpdateStatus }) {
+  <span class="cm">// A boolean state to control whether the cancel modal shows</span>
+  <span class="kw">const</span> [isCancelModalOpen, setIsCancelModalOpen] = <span class="hook">useState</span>(<span class="num">false</span>);
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;&gt;</span>
+      <span class="cm">{/* Button opens modal by setting state to true */}</span>
+      <span class="jsx">&lt;button</span> <span class="attr">onClick</span>={() => setIsCancelModalOpen(<span class="num">true</span>)}<span class="jsx">&gt;</span>
+        Cancel Order
+      <span class="jsx">&lt;/button&gt;</span>
+
+      <span class="cm">{/* Modal uses state to decide if it shows */}</span>
+      <span class="jsx">&lt;ConfirmModal</span>
+        <span class="attr">isOpen</span>={isCancelModalOpen}
+        <span class="attr">onCancel</span>={() => setIsCancelModalOpen(<span class="num">false</span>)}
+      <span class="jsx">/&gt;</span>
+    <span class="jsx">&lt;/&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <h3>Functional Updater Pattern (Advanced useState)</h3>
+      <div class="file-ref">src/context/OrderContext.jsx — functional updater for cart</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">OrderContext.jsx — functional state update</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="cm">// ✅ CORRECT — use functional updater when new state depends on old state</span>
+<span class="kw">const</span> <span class="fn">addToCart</span> = (item, qty = <span class="num">1</span>) => {
+  <span class="fn">setCartItems</span>((prev) => {       <span class="cm">// ← prev is the current state</span>
+    <span class="kw">const</span> existingIndex = prev.<span class="fn">findIndex</span>((i) => i.id === item.id);
+    <span class="kw">if</span> (existingIndex > -<span class="num">1</span>) {
+      <span class="cm">// Item already in cart — increase quantity</span>
+      <span class="kw">const</span> updated = [...prev];    <span class="cm">// spread to copy array (never mutate!)</span>
+      updated[existingIndex] = {
+        ...updated[existingIndex],  <span class="cm">// spread to copy object</span>
+        quantity: updated[existingIndex].quantity + qty,
+      };
+      <span class="kw">return</span> updated;
+    } <span class="kw">else</span> {
+      <span class="cm">// New item — add to end</span>
+      <span class="kw">return</span> [...prev, { ...item, quantity: qty }];
+    }
+  });
+};</pre>
+      </div>
+
+      <div class="warning">
+        <strong>⚠️ Never mutate state directly!</strong><br>
+        <code>cartItems.push(item)</code> — ❌ WRONG (React won't see the change)<br>
+        <code>setCartItems([...cartItems, item])</code> — ✅ CORRECT (creates a new array)
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/pages/AdminDashboardPage.jsx</code> — find its <code>useState</code></li>
+          <li>It has a <code>activeFilter</code> state — click the filter tabs and see it change</li>
+          <li>Add a new state <code>showRevenue</code> (boolean, starts <code>false</code>) to AdminDashboardPage</li>
+          <li>Add a button "Show Revenue" that toggles <code>showRevenue</code> using its setter</li>
+          <li>Conditionally render the total revenue text based on <code>showRevenue</code></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 5 — useEffect
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 05 — Level: Intermediate</div>
+  <h2>useEffect Hook — Side Effects &amp; Lifecycle</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-intermediate">Intermediate</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">⚡</div>
+      <div>
+        <div class="concept-title">useEffect</div>
+        <div class="concept-subtitle">Run code after render — for API calls, timers, localStorage, subscriptions</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong><code>useEffect</code></strong> is a Hook that lets you perform <em>side effects</em> in a component — actions that happen outside of rendering: fetching data from an API, saving to localStorage, setting timers, subscribing to events. It runs <em>after</em> every render by default. The <strong>dependency array</strong> <code>[]</code> controls when it re-runs. SpideyCafe uses <code>useEffect</code> to load menu items on mount, save the cart to localStorage when it changes, and auto-dismiss toast notifications.</p>
+      </div>
+
+      <h3>The 3 Forms of useEffect</h3>
+      <table class="compare-table">
+        <tr><th>Syntax</th><th>When it runs</th><th>SpideyCafe Example</th></tr>
+        <tr><td><code>useEffect(fn)</code></td><td>After EVERY render</td><td>Rarely used (performance issue)</td></tr>
+        <tr><td><code>useEffect(fn, [])</code></td><td>Only ONCE on mount</td><td>Load menu items</td></tr>
+        <tr><td><code>useEffect(fn, [dep])</code></td><td>When dep changes</td><td>Save cart when cartItems changes</td></tr>
+      </table>
+
+      <div class="file-ref">src/pages/MenuPage.jsx — useEffect to load menu on mount</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">MenuPage.jsx — Data fetching with useEffect</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="kw">import</span> React, { <span class="hook">useState</span>, <span class="hook">useEffect</span> } <span class="kw">from</span> <span class="str">'react'</span>;
+
+<span class="kw">export function</span> <span class="fn">MenuPage</span>() {
+  <span class="kw">const</span> [menuItems, setMenuItems] = <span class="hook">useState</span>([]);
+  <span class="kw">const</span> [loading, setLoading]     = <span class="hook">useState</span>(<span class="num">true</span>);
+
+  <span class="hook">useEffect</span>(() => {
+    <span class="cm">// ↑ This runs ONCE after component mounts (appears on screen)</span>
+
+    <span class="kw">let</span> isMounted = <span class="num">true</span>;  <span class="cm">// ← flag to prevent state update on unmounted component</span>
+
+    <span class="kw">async function</span> <span class="fn">loadMenu</span>() {
+      <span class="kw">try</span> {
+        <span class="fn">setLoading</span>(<span class="num">true</span>);
+        <span class="kw">const</span> data = <span class="kw">await</span> <span class="fn">getMenuItems</span>();  <span class="cm">// ← async API call</span>
+        <span class="kw">if</span> (isMounted) {                      <span class="cm">// ← only update if still mounted</span>
+          <span class="fn">setMenuItems</span>(data);
+        }
+      } <span class="kw">catch</span> (err) {
+        console.<span class="fn">error</span>(<span class="str">'Failed to load menu:'</span>, err);
+      } <span class="kw">finally</span> {
+        <span class="kw">if</span> (isMounted) <span class="fn">setLoading</span>(<span class="num">false</span>);
+      }
+    }
+
+    <span class="fn">loadMenu</span>();                              <span class="cm">// ← call the async function</span>
+
+    <span class="cm">// CLEANUP function — runs when component unmounts</span>
+    <span class="kw">return</span> () => {
+      isMounted = <span class="num">false</span>;                    <span class="cm">// ← prevent memory leak</span>
+    };
+  }, []);  <span class="cm">// ← empty array = run only ONCE on mount</span>
+}</pre>
+      </div>
+
+      <div class="file-ref">src/context/OrderContext.jsx — useEffect with dependency</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">OrderContext.jsx — useEffect syncing cart to localStorage</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="cm">// Run this effect every time cartItems changes</span>
+<span class="hook">useEffect</span>(() => {
+  <span class="fn">setStoredItem</span>(STORAGE_KEYS.CART, cartItems);  <span class="cm">// save to localStorage</span>
+}, [cartItems]);  <span class="cm">// ← dependency array: re-run when cartItems changes</span>
+
+<span class="cm">// Auto-dismiss toast after 4 seconds</span>
+<span class="kw">const</span> <span class="fn">showToast</span> = (message, type = <span class="str">'info'</span>) => {
+  <span class="kw">const</span> id = Date.<span class="fn">now</span>();
+  <span class="fn">setToast</span>({ id, message, type });
+
+  <span class="fn">setTimeout</span>(() => {          <span class="cm">// ← side effect: timer</span>
+    <span class="fn">setToast</span>((prev) =>        <span class="cm">// ← functional update</span>
+      prev?.id === id ? <span class="num">null</span> : prev
+    );
+  }, <span class="num">4000</span>);                   <span class="cm">// ← dismiss after 4 seconds</span>
+};</pre>
+      </div>
+
+      <div class="tip">
+        <strong>💡 Pro Tip:</strong> Never put <code>async</code> directly on the <code>useEffect</code> callback. Instead, define an async function <em>inside</em> useEffect and call it — this is exactly the pattern used in <code>MenuPage.jsx</code>.
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/pages/OrderConfirmationPage.jsx</code> — find the <code>useEffect</code></li>
+          <li>It fetches an order when <code>orderId</code> URL param changes — study the dependency array</li>
+          <li>Add a new <code>useEffect</code> to <code>MenuPage</code> that logs the count of filtered items: <code>console.log('Showing', filteredItems.length, 'items')</code></li>
+          <li>What should be in its dependency array? Run it and check the browser console</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 6 — EVENT HANDLING & FORMS
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 06 — Level: Intermediate</div>
+  <h2>Event Handling — Forms, Clicks &amp; Input Control</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-intermediate">Intermediate</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🖱️</div>
+      <div>
+        <div class="concept-title">Event Handling &amp; Controlled Inputs</div>
+        <div class="concept-subtitle">Responding to user actions and managing form data with React state</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p>In React, events like clicks, form submissions, and input changes are handled with <strong>camelCase event handlers</strong> like <code>onClick</code>, <code>onSubmit</code>, <code>onChange</code>. A <strong>Controlled Input</strong> means React state is the "single source of truth" for the input value — the input's <code>value</code> is bound to state, and <code>onChange</code> updates that state. This is how SpideyCafe's CheckoutPage manages the name, phone, and notes fields.</p>
+      </div>
+
+      <div class="file-ref">src/pages/CheckoutPage.jsx — full form with controlled inputs &amp; validation</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">CheckoutPage.jsx — Controlled Form</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">export function</span> <span class="fn">CheckoutPage</span>() {
+  <span class="cm">// State for each form field</span>
+  <span class="kw">const</span> [customerName, setCustomerName]   = <span class="hook">useState</span>(<span class="str">''</span>);
+  <span class="kw">const</span> [customerPhone, setCustomerPhone] = <span class="hook">useState</span>(<span class="str">''</span>);
+  <span class="kw">const</span> [specialNotes, setSpecialNotes]   = <span class="hook">useState</span>(<span class="str">''</span>);
+  <span class="kw">const</span> [errors, setErrors]               = <span class="hook">useState</span>({});
+  <span class="kw">const</span> [isSubmitting, setIsSubmitting]   = <span class="hook">useState</span>(<span class="num">false</span>);
+
+  <span class="cm">// Form validation function</span>
+  <span class="kw">const</span> <span class="fn">validateForm</span> = () => {
+    <span class="kw">const</span> errs = {};
+    <span class="kw">if</span> (!customerName.<span class="fn">trim</span>()) {
+      errs.customerName = <span class="str">'Please enter your name.'</span>;
+    }
+    <span class="kw">if</span> (!customerPhone.<span class="fn">trim</span>() || customerPhone.<span class="fn">trim</span>().length < <span class="num">8</span>) {
+      errs.customerPhone = <span class="str">'Phone must be at least 8 digits.'</span>;
+    }
+    <span class="fn">setErrors</span>(errs);
+    <span class="kw">return</span> Object.<span class="fn">keys</span>(errs).length === <span class="num">0</span>; <span class="cm">// true = valid</span>
+  };
+
+  <span class="cm">// Form submit handler</span>
+  <span class="kw">const</span> <span class="fn">handleSubmitOrder</span> = <span class="kw">async</span> (e) => {
+    e.<span class="fn">preventDefault</span>();      <span class="cm">// ← prevent browser default page reload</span>
+    <span class="kw">if</span> (!<span class="fn">validateForm</span>()) <span class="kw">return</span>;  <span class="cm">// ← stop if invalid</span>
+
+    <span class="kw">try</span> {
+      <span class="fn">setIsSubmitting</span>(<span class="num">true</span>);
+      <span class="kw">const</span> newOrder = <span class="kw">await</span> <span class="fn">placeOrder</span>({ tableNumber, customerName, ... });
+      <span class="fn">navigate</span>(<span class="str">`/order/${newOrder.id}`</span>);  <span class="cm">// ← redirect on success</span>
+    } <span class="kw">finally</span> {
+      <span class="fn">setIsSubmitting</span>(<span class="num">false</span>);
+    }
+  };
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;form</span> <span class="attr">onSubmit</span>={handleSubmitOrder}<span class="jsx">&gt;</span>  <span class="cm">{/* form submission event */}</span>
+
+      <span class="cm">{/* Controlled text input */}</span>
+      <span class="jsx">&lt;input</span>
+        <span class="attr">type</span>=<span class="str">"text"</span>
+        <span class="attr">value</span>={customerName}                  <span class="cm">{/* ← bound to state */}</span>
+        <span class="attr">onChange</span>={(e) => setCustomerName(e.target.value)}  <span class="cm">{/* ← update state */}</span>
+        <span class="attr">style</span>=<span class="str">{{</span>
+          <span class="attr">border</span>: errors.customerName ? <span class="str">'1.5px solid #DC2626'</span> : <span class="str">'1.5px solid var(--border-color)'</span>,
+        <span class="str">}}</span>
+      <span class="jsx">/&gt;</span>
+
+      <span class="cm">{/* Show validation error */}</span>
+      {errors.customerName &amp;&amp; (
+        <span class="jsx">&lt;span</span> <span class="attr">style</span>=<span class="str">{{ color: '#DC2626', fontSize: '0.8rem' }}</span><span class="jsx">&gt;</span>
+          {errors.customerName}
+        <span class="jsx">&lt;/span&gt;</span>
+      )}
+
+      <span class="cm">{/* Disabled submit while loading */}</span>
+      <span class="jsx">&lt;button</span>
+        <span class="attr">type</span>=<span class="str">"submit"</span>
+        <span class="attr">disabled</span>={isSubmitting}                <span class="cm">{/* ← prevent double-submit */}</span>
+        <span class="attr">style</span>=<span class="str">{{ opacity: isSubmitting ? 0.7 : 1 }}</span>
+      <span class="jsx">&gt;</span>
+        {isSubmitting ? <span class="str">'Placing...'</span> : <span class="str">'Place Order'</span>}
+      <span class="jsx">&lt;/button&gt;</span>
+    <span class="jsx">&lt;/form&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/pages/CheckoutPage.jsx</code> and trace how <code>customerName</code> state flows</li>
+          <li>Add a new optional field "Seat Number" with its own state <code>seatNumber</code></li>
+          <li>Include it in the <code>handleSubmitOrder</code> call to <code>placeOrder()</code></li>
+          <li>Add a validation: seat number must be between 1 and 6 if provided</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 7 — CONDITIONAL RENDERING
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 07 — Level: Intermediate</div>
+  <h2>Conditional Rendering — Showing Different UI</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-intermediate">Intermediate</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🔀</div>
+      <div>
+        <div class="concept-title">Conditional Rendering</div>
+        <div class="concept-subtitle">React shows different UI based on state, props, or logic</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong>Conditional Rendering</strong> means showing different UI components or elements based on a condition. In React, since JSX is just JavaScript, you use standard JavaScript conditionals: <strong>ternary operators</strong> <code>? :</code>, <strong>short-circuit evaluation</strong> <code>&amp;&amp;</code>, or <strong>early returns</strong> from the function. SpideyCafe uses all three patterns extensively.</p>
+      </div>
+
+      <div class="file-ref">src/pages/MenuPage.jsx — three-way conditional rendering</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">MenuPage.jsx — Loading / Empty / Items states</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">{/* Three-way conditional: loading → empty → items */}</span>
+{loading ? (
+  <span class="cm">{/* 1. LOADING STATE — show skeleton placeholders */}</span>
+  <span class="jsx">&lt;div&gt;</span>
+    {[<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>].<span class="fn">map</span>((n) => (
+      <span class="jsx">&lt;div</span> <span class="attr">key</span>={n} <span class="attr">style</span>=<span class="str">{{ height: '320px', backgroundColor: '#EFE8DD' }}</span> <span class="jsx">/&gt;</span>
+    ))}
+  <span class="jsx">&lt;/div&gt;</span>
+) : filteredItems.length === <span class="num">0</span> ? (
+  <span class="cm">{/* 2. EMPTY STATE — no results found */}</span>
+  <span class="jsx">&lt;div&gt;</span>
+    <span class="jsx">&lt;h3&gt;</span>No dishes found<span class="jsx">&lt;/h3&gt;</span>
+    <span class="jsx">&lt;button</span> <span class="attr">onClick</span>={() => { setSearchTerm(<span class="str">''</span>); setActiveCategory(<span class="str">'all'</span>); }}<span class="jsx">&gt;</span>
+      Reset Filters
+    <span class="jsx">&lt;/button&gt;</span>
+  <span class="jsx">&lt;/div&gt;</span>
+) : (
+  <span class="cm">{/* 3. SUCCESS STATE — render items grid */}</span>
+  <span class="jsx">&lt;div</span> <span class="attr">style</span>=<span class="str">{{ display: 'grid' }}</span><span class="jsx">&gt;</span>
+    {filteredItems.<span class="fn">map</span>((item) => (
+      <span class="jsx">&lt;MenuItemCard</span> <span class="attr">key</span>={item.id} <span class="attr">item</span>={item} <span class="jsx">/&gt;</span>
+    ))}
+  <span class="jsx">&lt;/div&gt;</span>
+)}</pre>
+      </div>
+
+      <h3>Short-Circuit &amp;&amp; — Show if true, hide if false</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">MenuItemCard.jsx — && short-circuit</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">{/* Only shows "Bestseller" badge if item.popular is true */}</span>
+{item.popular &amp;&amp; (
+  <span class="jsx">&lt;span</span> <span class="attr">style</span>=<span class="str">{{ backgroundColor: 'rgba(42,27,22,0.85)', color: '#FFD700' }}</span><span class="jsx">&gt;</span>
+    ⭐ Bestseller
+  <span class="jsx">&lt;/span&gt;</span>
+)}
+
+<span class="cm">{/* Cart count badge — only shows if quantity > 0 */}</span>
+{totals.itemQuantity > <span class="num">0</span> &amp;&amp; (
+  <span class="jsx">&lt;span</span><span class="jsx">&gt;</span>{totals.itemQuantity}<span class="jsx">&lt;/span&gt;</span>
+)}</pre>
+      </div>
+
+      <h3>Early Return — Simplest Pattern for Guard Cases</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">Toast.jsx &amp; ConfirmModal.jsx — early return</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">// Toast.jsx — return null if no toast to show</span>
+<span class="kw">export function</span> <span class="fn">Toast</span>() {
+  <span class="kw">const</span> { toast } = <span class="fn">useOrderContext</span>();
+  <span class="kw">if</span> (!toast) <span class="kw">return</span> <span class="num">null</span>;  <span class="cm">// ← early return = renders nothing</span>
+  <span class="kw">return</span> <span class="jsx">&lt;div&gt;...&lt;/div&gt;</span>;
+}
+
+<span class="cm">// ConfirmModal.jsx — only render when isOpen is true</span>
+<span class="kw">export function</span> <span class="fn">ConfirmModal</span>({ isOpen }) {
+  <span class="kw">if</span> (!isOpen) <span class="kw">return</span> <span class="num">null</span>;  <span class="cm">// ← nothing rendered if modal is closed</span>
+  <span class="kw">return</span> <span class="jsx">&lt;div&gt;...modal content...&lt;/div&gt;</span>;
+}</pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>In <code>MenuItemCard.jsx</code>, the quantity control shows differently if <code>quantity === 0</code></li>
+          <li>Find this conditional and understand the ternary pattern</li>
+          <li>Add a "SOLD OUT" badge using <code>&amp;&amp;</code> short-circuit that shows when <code>item.soldOut</code> is <code>true</code></li>
+          <li>In <code>menuData.js</code>, set <code>soldOut: true</code> on one item and see it appear</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 8 — LIST RENDERING
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 08 — Level: Intermediate</div>
+  <h2>List Rendering — Arrays, .map() &amp; Keys</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-intermediate">Intermediate</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">📋</div>
+      <div>
+        <div class="concept-title">Rendering Lists with .map()</div>
+        <div class="concept-subtitle">Transform arrays of data into arrays of UI elements</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p>React renders lists by using JavaScript's <code>.map()</code> to transform an array of data into an array of JSX elements. The crucial rule: every list item needs a unique <strong><code>key</code> prop</strong> so React can efficiently update only the changed items. Use a stable unique ID (like <code>item.id</code>) as the key — never use the array index as key if the list can be reordered.</p>
+      </div>
+
+      <div class="file-ref">src/pages/MenuPage.jsx — .map() over menu items array</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">MenuPage.jsx — List rendering with keys</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">{/* filteredItems is an array of menu item objects */}</span>
+{filteredItems.<span class="fn">map</span>((item) => (
+  <span class="jsx">&lt;MenuItemCard</span>
+    <span class="attr">key</span>={item.id}    <span class="cm">{/* ← REQUIRED unique key — use item.id, not index */}</span>
+    <span class="attr">item</span>={item}      <span class="cm">{/* ← pass whole item as prop */}</span>
+  <span class="jsx">/&gt;</span>
+))}
+
+<span class="cm">{/* CategoryFilter — mapping over CATEGORIES array */}</span>
+{CATEGORIES.<span class="fn">map</span>((cat) => (
+  <span class="jsx">&lt;button</span>
+    <span class="attr">key</span>={cat.id}               <span class="cm">{/* ← unique key from data */}</span>
+    <span class="attr">onClick</span>={() => onSelectCategory(cat.id)}
+    <span class="attr">style</span>=<span class="str">{{</span>
+      <span class="attr">backgroundColor</span>: isActive ? <span class="str">'var(--brand-terracotta)'</span> : <span class="str">'#FFFFFF'</span>,
+    <span class="str">}}</span>
+  <span class="jsx">&gt;</span>
+    {cat.name}
+  <span class="jsx">&lt;/button&gt;</span>
+))}</pre>
+      </div>
+
+      <h3>Mapping Over Order Items in OrderCard</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">OrderCard.jsx — nested map</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="cm">{/* order.items is an array of ordered menu items */}</span>
+{order.items.<span class="fn">map</span>((item, idx) => (
+  <span class="jsx">&lt;div</span>
+    <span class="attr">key</span>={idx}    <span class="cm">{/* ← using index OK here — list never reorders */}</span>
+    <span class="attr">style</span>=<span class="str">{{ display: 'flex', justifyContent: 'space-between' }}</span>
+  <span class="jsx">&gt;</span>
+    <span class="jsx">&lt;span&gt;</span>
+      <span class="jsx">&lt;span</span> <span class="attr">style</span>=<span class="str">{{ color: 'var(--brand-terracotta)' }}</span><span class="jsx">&gt;</span>{item.quantity}x<span class="jsx">&lt;/span&gt;</span>
+      {item.name}
+    <span class="jsx">&lt;/span&gt;</span>
+    <span class="jsx">&lt;span&gt;</span>{formatCurrency(item.price * item.quantity)}<span class="jsx">&lt;/span&gt;</span>
+  <span class="jsx">&lt;/div&gt;</span>
+))}</pre>
+      </div>
+
+      <div class="warning">
+        <strong>⚠️ Missing key warning:</strong> If you forget the <code>key</code> prop, React prints a warning in the console and performance suffers. Always use stable, unique IDs from your data as keys.
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/components/admin/StatsHeader.jsx</code> — find where it maps over the <code>stats</code> array</li>
+          <li>It uses array index (<code>idx</code>) as key — is this OK? Why?</li>
+          <li>Add a new stat object to the <code>stats</code> array: show count of "served" orders</li>
+          <li>Watch it automatically appear in the rendered grid — that's the power of <code>.map()</code>!</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 9 — REACT ROUTER
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 09 — Level: Advanced</div>
+  <h2>React Router v7 — Pages, Navigation &amp; URL Parameters</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-advanced">Advanced</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🗺️</div>
+      <div>
+        <div class="concept-title">React Router DOM</div>
+        <div class="concept-subtitle">Client-side routing — multiple "pages" in a single HTML file</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong>React Router</strong> lets you create multi-page experiences in a Single-Page Application (SPA). The URL changes without a full page reload. Routes map URL paths to React components. SpideyCafe has 6 routes: menu, cart, checkout, order confirmation, admin dashboard, and a 404 not-found page. It also uses <strong>URL parameters</strong> (<code>/order/:orderId</code>) and <strong>query strings</strong> (<code>?table=3</code>).</p>
+      </div>
+
+      <div class="file-ref">src/App.jsx — all routes defined here</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">App.jsx — Route configuration</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">import</span> { <span class="var">BrowserRouter</span>, <span class="var">Routes</span>, <span class="var">Route</span>, <span class="var">Navigate</span> } <span class="kw">from</span> <span class="str">'react-router-dom'</span>;
+
+<span class="kw">export default function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;BrowserRouter&gt;</span>           <span class="cm">{/* wraps entire app — enables routing */}</span>
+      <span class="jsx">&lt;OrderProvider&gt;</span>
+        <span class="jsx">&lt;Routes&gt;</span>              <span class="cm">{/* container for all Route definitions */}</span>
+
+          <span class="cm">{/* CustomerLayout wraps customer-facing pages */}</span>
+          <span class="jsx">&lt;Route</span> <span class="attr">element</span>=<span class="str">{&lt;CustomerLayout /&gt;}</span><span class="jsx">&gt;</span>
+            <span class="jsx">&lt;Route</span> <span class="attr">path</span>=<span class="str">"/"</span>
+                   <span class="attr">element</span>=<span class="str">{&lt;Navigate to="/menu?table=3" replace /&gt;}</span> <span class="jsx">/&gt;</span>
+            <span class="cm">{/*        ↑ redirect "/" to "/menu?table=3" */}</span>
+
+            <span class="jsx">&lt;Route</span> <span class="attr">path</span>=<span class="str">"/menu"</span>        <span class="attr">element</span>=<span class="str">{&lt;MenuPage /&gt;}</span> <span class="jsx">/&gt;</span>
+            <span class="jsx">&lt;Route</span> <span class="attr">path</span>=<span class="str">"/cart"</span>        <span class="attr">element</span>=<span class="str">{&lt;CartPage /&gt;}</span> <span class="jsx">/&gt;</span>
+            <span class="jsx">&lt;Route</span> <span class="attr">path</span>=<span class="str">"/checkout"</span>    <span class="attr">element</span>=<span class="str">{&lt;CheckoutPage /&gt;}</span> <span class="jsx">/&gt;</span>
+
+            <span class="cm">{/* Dynamic URL parameter — :orderId is extracted with useParams() */}</span>
+            <span class="jsx">&lt;Route</span> <span class="attr">path</span>=<span class="str">"/order/:orderId"</span> <span class="attr">element</span>=<span class="str">{&lt;OrderConfirmationPage /&gt;}</span> <span class="jsx">/&gt;</span>
+
+            <span class="jsx">&lt;Route</span> <span class="attr">path</span>=<span class="str">"*"</span>           <span class="attr">element</span>=<span class="str">{&lt;NotFoundPage /&gt;}</span> <span class="jsx">/&gt;</span>
+            <span class="cm">{/*    ↑ catch-all 404 route */}</span>
+          <span class="jsx">&lt;/Route&gt;</span>
+
+          <span class="cm">{/* Separate layout for admin */}</span>
+          <span class="jsx">&lt;Route</span> <span class="attr">element</span>=<span class="str">{&lt;AdminLayout /&gt;}</span><span class="jsx">&gt;</span>
+            <span class="jsx">&lt;Route</span> <span class="attr">path</span>=<span class="str">"/admin"</span>       <span class="attr">element</span>=<span class="str">{&lt;AdminDashboardPage /&gt;}</span> <span class="jsx">/&gt;</span>
+          <span class="jsx">&lt;/Route&gt;</span>
+
+        <span class="jsx">&lt;/Routes&gt;</span>
+      <span class="jsx">&lt;/OrderProvider&gt;</span>
+    <span class="jsx">&lt;/BrowserRouter&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <h3>Router Hooks — useParams, useNavigate, useLocation, useSearchParams</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">Router hooks used across the project</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="cm">// 1. useParams — read dynamic URL segments like /order/:orderId</span>
+<span class="cm">// File: src/pages/OrderConfirmationPage.jsx</span>
+<span class="kw">const</span> { orderId } = <span class="fn">useParams</span>();  <span class="cm">// orderId = "ORD-1234" from URL</span>
+
+<span class="cm">// 2. useNavigate — programmatic navigation (redirect after action)</span>
+<span class="cm">// File: src/pages/CheckoutPage.jsx</span>
+<span class="kw">const</span> navigate = <span class="fn">useNavigate</span>();
+navigate(<span class="str">`/order/${newOrder.id}?table=${tableNumber}`</span>); <span class="cm">// redirect</span>
+
+<span class="cm">// 3. useLocation — read current URL path</span>
+<span class="cm">// File: src/components/common/Navbar.jsx</span>
+<span class="kw">const</span> location = <span class="fn">useLocation</span>();
+<span class="kw">const</span> isAdminPage = location.pathname.<span class="fn">startsWith</span>(<span class="str">'/admin'</span>);
+
+<span class="cm">// 4. useSearchParams — read/write ?key=value query strings</span>
+<span class="cm">// File: src/hooks/useTableNumber.js</span>
+<span class="kw">const</span> [searchParams, setSearchParams] = <span class="fn">useSearchParams</span>();
+<span class="kw">const</span> rawTable = searchParams.<span class="fn">get</span>(<span class="str">'table'</span>);  <span class="cm">// reads ?table=3</span>
+
+<span class="cm">// 5. Link — declarative navigation (replaces &lt;a href=""&gt;)</span>
+<span class="cm">// File: src/pages/CartPage.jsx</span>
+<span class="jsx">&lt;Link</span> <span class="attr">to</span>=<span class="str">{`/menu?table=${tableNumber}`}</span><span class="jsx">&gt;</span>Back to Menu<span class="jsx">&lt;/Link&gt;</span></pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open your browser at <code>http://localhost:5173/menu?table=5</code></li>
+          <li>Open <code>src/hooks/useTableNumber.js</code> — see how <code>useSearchParams</code> reads <code>?table=5</code></li>
+          <li>Navigate to <code>/order/ORD-9999</code> — see the "Order Not Found" error state (from <code>useParams</code>)</li>
+          <li>Add a new route <code>/about</code> in <code>App.jsx</code> that renders a simple "About Us" component</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 10 — CONTEXT API
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 10 — Level: Advanced</div>
+  <h2>Context API — Global State Without Prop Drilling</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-advanced">Advanced</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🌐</div>
+      <div>
+        <div class="concept-title">React Context API</div>
+        <div class="concept-subtitle">Share data across the whole component tree without passing props manually at every level</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong>Context API</strong> solves <em>prop drilling</em> — the problem of passing props through many component layers just to reach a deeply nested child. With Context, you <strong>create</strong> a context, wrap your app in a <strong>Provider</strong> with a <code>value</code>, and any component anywhere in the tree can <strong>consume</strong> that value with <code>useContext</code>. SpideyCafe's <code>OrderContext</code> holds cart items, orders, toast notifications, and all their actions — shared across every page and component.</p>
+      </div>
+
+      <h3>The 3-Step Pattern</h3>
+      <div class="file-ref">src/context/OrderContext.jsx — the heart of SpideyCafe's state</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">OrderContext.jsx — Create, Provide, Consume</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="kw">import</span> { <span class="var">createContext</span>, <span class="var">useContext</span>, <span class="var">useState</span>, <span class="var">useEffect</span>, <span class="var">useCallback</span> } <span class="kw">from</span> <span class="str">'react'</span>;
+
+<span class="cm">// ── STEP 1: CREATE the context ─────────────────────────────</span>
+<span class="kw">const</span> <span class="var">OrderContext</span> = <span class="fn">createContext</span>(<span class="num">null</span>);
+<span class="cm">// OrderContext is a special "container" for shared data</span>
+
+<span class="cm">// ── STEP 2: CREATE the Provider component ─────────────────</span>
+<span class="kw">export function</span> <span class="fn">OrderProvider</span>({ children }) {
+  <span class="cm">// All the shared state lives HERE (in the provider)</span>
+  <span class="kw">const</span> [cartItems, setCartItems] = <span class="hook">useState</span>(() => {
+    <span class="kw">return</span> <span class="fn">getStoredItem</span>(STORAGE_KEYS.CART, []);  <span class="cm">// ← lazy initial state</span>
+  });
+  <span class="kw">const</span> [orders, setOrders]           = <span class="hook">useState</span>([]);
+  <span class="kw">const</span> [loadingOrders, setLoadingOrders] = <span class="hook">useState</span>(<span class="num">true</span>);
+  <span class="kw">const</span> [toast, setToast]             = <span class="hook">useState</span>(<span class="num">null</span>);
+
+  <span class="cm">// ... all cart actions, order actions, toast helpers ...</span>
+
+  <span class="cm">// The "value" object — everything consumers can access</span>
+  <span class="kw">const</span> value = {
+    cartItems, cartTotals, addToCart, updateQuantity,
+    removeFromCart, clearCart, getItemQuantity,
+    orders, loadingOrders, refreshOrders,
+    placeOrder, updateOrderStatus, simulateIncomingOrder,
+    toast, showToast, hideToast,
+  };
+
+  <span class="cm">// Wrap children in the Provider — they can now access "value"</span>
+  <span class="kw">return</span> <span class="jsx">&lt;OrderContext.Provider</span> <span class="attr">value</span>={value}<span class="jsx">&gt;</span>{children}<span class="jsx">&lt;/OrderContext.Provider&gt;</span>;
+}
+
+<span class="cm">// ── STEP 3: CONSUME with a custom hook ────────────────────</span>
+<span class="kw">export function</span> <span class="fn">useOrderContext</span>() {
+  <span class="kw">const</span> context = <span class="fn">useContext</span>(OrderContext);
+  <span class="kw">if</span> (!context) {
+    <span class="cm">// Safety check — tell devs if they forgot to wrap with Provider</span>
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">'useOrderContext must be used within an OrderProvider'</span>);
+  }
+  <span class="kw">return</span> context;
+}</pre>
+      </div>
+
+      <h3>How Toast.jsx Consumes the Context</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">Toast.jsx — consuming context</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">import</span> { <span class="fn">useOrderContext</span> } <span class="kw">from</span> <span class="str">'../../context/OrderContext'</span>;
+
+<span class="kw">export function</span> <span class="fn">Toast</span>() {
+  <span class="cm">// Pull out exactly what we need from the context</span>
+  <span class="kw">const</span> { toast, hideToast } = <span class="fn">useOrderContext</span>();
+
+  <span class="kw">if</span> (!toast) <span class="kw">return</span> <span class="num">null</span>;  <span class="cm">// no toast = render nothing</span>
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div</span><span class="jsx">&gt;</span>
+      <span class="jsx">&lt;span&gt;</span>{toast.message}<span class="jsx">&lt;/span&gt;</span>
+      <span class="jsx">&lt;button</span> <span class="attr">onClick</span>={hideToast}<span class="jsx">&gt;</span>✕<span class="jsx">&lt;/button&gt;</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}
+<span class="cm">// Toast doesn't need props! It reads directly from global context.</span></pre>
+      </div>
+
+      <div class="tip">
+        <strong>💡 Context vs Props:</strong> Use props for data that belongs to a parent-child relationship. Use Context for truly "global" data: the current user, the cart, theme, language, notifications. Don't put everything in Context — it can cause performance issues.
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Open <code>src/context/OrderContext.jsx</code> — read the full <code>value</code> object</li>
+          <li>Open <code>src/hooks/useCart.js</code> — see how it wraps <code>useOrderContext</code></li>
+          <li>Add a new piece of state <code>favItems</code> (array) to the context for a "favorites" feature</li>
+          <li>Expose <code>addToFav</code> and <code>favItems</code> in the context <code>value</code> object</li>
+          <li>Consume it in <code>MenuItemCard</code> to show a ❤️ icon for favorited items</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 11 — CUSTOM HOOKS
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 11 — Level: Advanced</div>
+  <h2>Custom Hooks — Extracting &amp; Reusing Logic</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-advanced">Advanced</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🪝</div>
+      <div>
+        <div class="concept-title">Custom React Hooks</div>
+        <div class="concept-subtitle">Functions that start with "use" and encapsulate reusable stateful logic</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p>A <strong>Custom Hook</strong> is a JavaScript function whose name starts with <code>use</code> and that calls other React hooks. Custom hooks let you extract stateful logic out of components so it can be <em>reused</em> across multiple components without duplicating code. SpideyCafe has 3 custom hooks: <code>useCart</code>, <code>useOrders</code>, and <code>useTableNumber</code>. Instead of calling <code>useOrderContext</code> everywhere, components call clean, purpose-specific hooks.</p>
+      </div>
+
+      <div class="file-ref">src/hooks/useTableNumber.js — most sophisticated custom hook in the project</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">useTableNumber.js — full custom hook</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="kw">import</span> { <span class="fn">useSearchParams</span> } <span class="kw">from</span> <span class="str">'react-router-dom'</span>;
+<span class="kw">import</span> { <span class="fn">getStoredItem</span>, <span class="fn">setStoredItem</span>, STORAGE_KEYS } <span class="kw">from</span> <span class="str">'../services/storageService'</span>;
+
+<span class="cm">/**
+ * Custom hook — starts with "use", uses other hooks inside
+ * Manages which table number is active:
+ * Priority: URL param → localStorage → default
+ */</span>
+<span class="kw">export function</span> <span class="fn">useTableNumber</span>() {
+  <span class="cm">// Uses a React Router hook inside</span>
+  <span class="kw">const</span> [searchParams, setSearchParams] = <span class="fn">useSearchParams</span>();
+  <span class="kw">const</span> rawTable = searchParams.<span class="fn">get</span>(<span class="str">'table'</span>);  <span class="cm">// reads ?table=3 from URL</span>
+
+  <span class="kw">let</span> activeTable = <span class="num">1</span>;  <span class="cm">// default table</span>
+
+  <span class="kw">if</span> (rawTable) {
+    <span class="kw">const</span> parsed = <span class="fn">parseInt</span>(rawTable, <span class="num">10</span>);
+    <span class="kw">if</span> (!<span class="fn">isNaN</span>(parsed) &amp;&amp; parsed > <span class="num">0</span>) {
+      activeTable = parsed;
+      <span class="fn">setStoredItem</span>(STORAGE_KEYS.TABLE, activeTable);  <span class="cm">// save to localStorage</span>
+    }
+  } <span class="kw">else</span> {
+    <span class="kw">const</span> stored = <span class="fn">getStoredItem</span>(STORAGE_KEYS.TABLE, <span class="num">null</span>);
+    <span class="kw">if</span> (stored) activeTable = <span class="fn">Number</span>(stored);
+  }
+
+  <span class="kw">const</span> <span class="fn">changeTable</span> = (newTableNum) => {
+    <span class="kw">const</span> num = <span class="fn">Number</span>(newTableNum);
+    <span class="fn">setStoredItem</span>(STORAGE_KEYS.TABLE, num);
+    <span class="fn">setSearchParams</span>((prev) => {
+      <span class="kw">const</span> next = <span class="kw">new</span> <span class="fn">URLSearchParams</span>(prev);
+      next.<span class="fn">set</span>(<span class="str">'table'</span>, num.<span class="fn">toString</span>());
+      <span class="kw">return</span> next;
+    }, { replace: <span class="num">true</span> });
+  };
+
+  <span class="cm">// Return the interface — like a mini-API for the table</span>
+  <span class="kw">return</span> {
+    tableNumber: activeTable,
+    changeTable,
+    availableTables: [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>],
+    hasUrlTable: <span class="fn">Boolean</span>(rawTable),
+  };
+}
+
+<span class="cm">// Used in 4 different components with just one line:</span>
+<span class="cm">// const { tableNumber, changeTable } = useTableNumber();</span></pre>
+      </div>
+
+      <h3>useCart — Facade Pattern Over Context</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">useCart.js — hook as a context facade</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="cm">// A "facade" hook — picks relevant data from context &amp; adds derived state</span>
+<span class="kw">export function</span> <span class="fn">useCart</span>() {
+  <span class="kw">const</span> {
+    cartItems, cartTotals, addToCart,
+    updateQuantity, removeFromCart, clearCart, getItemQuantity,
+  } = <span class="fn">useOrderContext</span>();
+
+  <span class="kw">return</span> {
+    items: cartItems,
+    totals: cartTotals,
+    addToCart,
+    updateQuantity,
+    removeFromCart,
+    clearCart,
+    getItemQuantity,
+    isEmpty: cartItems.length === <span class="num">0</span>,  <span class="cm">// ← derived value added here</span>
+  };
+}
+
+<span class="cm">// CartPage uses it cleanly:</span>
+<span class="cm">// const { items, totals, isEmpty, clearCart } = useCart();</span></pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Create a new custom hook <code>src/hooks/useSearch.js</code></li>
+          <li>It should manage a <code>searchTerm</code> state and expose a <code>clearSearch</code> function</li>
+          <li>Move the search state out of <code>MenuPage</code> into this new <code>useSearch</code> hook</li>
+          <li>Call <code>useSearch()</code> in <code>MenuPage</code> and destructure <code>{ searchTerm, setSearchTerm, clearSearch }</code></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 12 — useCallback
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 12 — Level: Pro</div>
+  <h2>useCallback — Stabilizing Functions for Performance</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-pro">Pro</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">⚡</div>
+      <div>
+        <div class="concept-title">useCallback</div>
+        <div class="concept-subtitle">Memoize functions so they don't get recreated on every render</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong><code>useCallback</code></strong> returns a <em>memoized</em> (cached) version of a function. Without it, every time a component re-renders, every function defined inside is recreated — a new function reference. This matters when passing functions as props to child components, or as dependencies in <code>useEffect</code>. <code>useCallback(fn, [deps])</code> only recreates the function when one of its dependencies changes. SpideyCafe's <code>OrderContext</code> wraps ALL its action functions in <code>useCallback</code>.</p>
+      </div>
+
+      <div class="file-ref">src/context/OrderContext.jsx — all functions wrapped in useCallback</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">OrderContext.jsx — useCallback patterns</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="cm">// Without useCallback — new function on EVERY render (bad for context consumers)</span>
+<span class="kw">const</span> <span class="fn">showToastBAD</span> = (message, type) => {  <span class="cm">// ← recreated every render!</span>
+  setToast({ id: Date.<span class="fn">now</span>(), message, type });
+};
+
+<span class="cm">// ✅ With useCallback — same function reference across renders</span>
+<span class="kw">const</span> <span class="fn">showToast</span> = <span class="hook">useCallback</span>((message, type = <span class="str">'info'</span>) => {
+  <span class="kw">const</span> id = Date.<span class="fn">now</span>();
+  <span class="fn">setToast</span>({ id, message, type });
+  <span class="fn">setTimeout</span>(() => {
+    <span class="fn">setToast</span>((prev) => (prev?.id === id ? <span class="num">null</span> : prev));
+  }, <span class="num">4000</span>);
+}, []);  <span class="cm">// ← empty deps: never recreated (no dependencies)</span>
+
+<span class="cm">// refreshOrders depends on nothing from outside</span>
+<span class="kw">const</span> <span class="fn">refreshOrders</span> = <span class="hook">useCallback</span>(<span class="kw">async</span> () => {
+  <span class="kw">try</span> {
+    <span class="fn">setLoadingOrders</span>(<span class="num">true</span>);
+    <span class="kw">const</span> data = <span class="kw">await</span> orderService.<span class="fn">getOrders</span>();
+    <span class="fn">setOrders</span>(data);
+  } <span class="kw">catch</span> (err) { console.<span class="fn">error</span>(err); }
+  <span class="kw">finally</span> { <span class="fn">setLoadingOrders</span>(<span class="num">false</span>); }
+}, []);  <span class="cm">// ← stable: never depends on any changing value</span>
+
+<span class="cm">// placeOrder depends on: refreshOrders, clearCart, showToast</span>
+<span class="kw">const</span> <span class="fn">placeOrder</span> = <span class="hook">useCallback</span>(<span class="kw">async</span> (orderData) => {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> newOrder = <span class="kw">await</span> orderService.<span class="fn">createOrder</span>(orderData);
+    <span class="kw">await</span> <span class="fn">refreshOrders</span>();             <span class="cm">// ← uses stable refreshOrders</span>
+    <span class="fn">clearCart</span>();
+    <span class="fn">showToast</span>(<span class="str">`Order #${newOrder.id} placed!`</span>, <span class="str">'success'</span>);
+    <span class="kw">return</span> newOrder;
+  } <span class="kw">catch</span> (err) {
+    <span class="fn">showToast</span>(<span class="str">'Failed to place order.'</span>, <span class="str">'warning'</span>);
+    <span class="kw">throw</span> err;
+  }
+}, [refreshOrders, clearCart, showToast]);  <span class="cm">// ← deps: recreate if these change</span></pre>
+      </div>
+
+      <div class="key-points">
+        <div class="key-points-title">🔑 Key Takeaways</div>
+        <ul>
+          <li>Every function in a component is recreated on re-render without <code>useCallback</code></li>
+          <li>Use <code>useCallback</code> for functions passed as props to child components</li>
+          <li>Use <code>useCallback</code> for functions used as <code>useEffect</code> dependencies</li>
+          <li>The dependency array works the same as <code>useEffect</code></li>
+          <li>Don't overuse it — premature optimization. Add it when you see performance issues</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 13 — SERVICE LAYER
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 13 — Level: Pro</div>
+  <h2>Service Layer &amp; Async Data Fetching</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-pro">Pro</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🔌</div>
+      <div>
+        <div class="concept-title">Service Layer Architecture</div>
+        <div class="concept-subtitle">Abstract all API/data operations behind service functions — separate concerns</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p>A <strong>Service Layer</strong> separates data fetching logic from UI components. Instead of calling <code>fetch('/api/menu')</code> directly inside a component, you create dedicated service files (<code>menuService.js</code>, <code>orderService.js</code>) that encapsulate all data operations. SpideyCafe's service layer supports <em>both</em> mock data (for prototype) and real API calls (for production) controlled by a single flag <code>API_CONFIG.USE_MOCK_DATA</code>.</p>
+      </div>
+
+      <div class="file-ref">src/services/apiConfig.js + src/services/orderService.js</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">apiConfig.js + orderService.js — service pattern</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="cm">// ── apiConfig.js ─────────────────────────────────────────────</span>
+<span class="kw">export const</span> API_CONFIG = {
+  USE_MOCK_DATA: <span class="num">true</span>,   <span class="cm">// ← flip to false for real backend</span>
+  API_BASE_URL: <span class="str">'https://localhost:7001/api'</span>,
+};
+
+<span class="kw">export async function</span> <span class="fn">apiFetch</span>(endpoint, options = {}) {
+  <span class="kw">const</span> url = <span class="str">`${API_CONFIG.API_BASE_URL}${endpoint}`</span>;
+  <span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(url, {
+    ...options,
+    headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>, ...options.headers },
+  });
+  <span class="kw">if</span> (!response.ok) {
+    <span class="kw">const</span> err = <span class="kw">await</span> response.<span class="fn">json</span>().<span class="fn">catch</span>(() => ({ message: <span class="str">'HTTP error'</span> }));
+    <span class="kw">throw new</span> <span class="fn">Error</span>(err.message);
+  }
+  <span class="kw">return</span> response.<span class="fn">json</span>();
+}
+
+<span class="cm">// ── orderService.js ──────────────────────────────────────────</span>
+<span class="cm">// Each function checks the flag — same interface for mock &amp; real API</span>
+
+<span class="kw">export async function</span> <span class="fn">getOrders</span>() {
+  <span class="kw">if</span> (!API_CONFIG.USE_MOCK_DATA) {
+    <span class="kw">return await</span> <span class="fn">apiFetch</span>(<span class="str">'/orders'</span>);  <span class="cm">// ← real API call</span>
+  }
+  <span class="cm">// Prototype: read from localStorage</span>
+  <span class="kw">await new</span> <span class="fn">Promise</span>((resolve) => <span class="fn">setTimeout</span>(resolve, <span class="num">100</span>));  <span class="cm">// simulate latency</span>
+  <span class="kw">let</span> orders = <span class="fn">getStoredItem</span>(STORAGE_KEYS.ORDERS, <span class="num">null</span>);
+  <span class="kw">if</span> (!orders) {
+    orders = INITIAL_ORDERS;
+    <span class="fn">setStoredItem</span>(STORAGE_KEYS.ORDERS, orders);
+  }
+  <span class="kw">return</span> orders;
+}
+
+<span class="kw">export async function</span> <span class="fn">createOrder</span>(orderPayload) {
+  <span class="kw">if</span> (!API_CONFIG.USE_MOCK_DATA) {
+    <span class="kw">return await</span> <span class="fn">apiFetch</span>(<span class="str">'/orders'</span>, {
+      method: <span class="str">'POST'</span>,
+      body: <span class="fn">JSON.stringify</span>(orderPayload),   <span class="cm">// ← POST body</span>
+    });
+  }
+  <span class="cm">// Prototype: create locally &amp; save to localStorage</span>
+  <span class="kw">const</span> newOrder = {
+    id: <span class="fn">generateOrderId</span>(),
+    ...orderPayload,
+    createdAt: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>(),
+    status: <span class="str">'new'</span>,
+  };
+  <span class="kw">const</span> orders = <span class="kw">await</span> <span class="fn">getOrders</span>();
+  <span class="fn">setStoredItem</span>(STORAGE_KEYS.ORDERS, [newOrder, ...orders]);
+  <span class="kw">return</span> newOrder;
+}</pre>
+      </div>
+
+      <div class="key-points">
+        <div class="key-points-title">🔑 Key Takeaways — Pro Architecture</div>
+        <ul>
+          <li>Service functions are <em>async</em> and always return a Promise — use <code>await</code></li>
+          <li>Components never call <code>fetch()</code> directly — services do that</li>
+          <li>The <code>USE_MOCK_DATA</code> flag lets you switch backend/frontend independently</li>
+          <li>Error handling is centralized in the service layer (not scattered in components)</li>
+          <li>This pattern is called <strong>Repository Pattern</strong> / <strong>Service Layer Pattern</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 14 — LAYOUTS & OUTLETS
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 14 — Level: Pro</div>
+  <h2>Layouts, Outlets &amp; Component Composition Patterns</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-pro">Pro</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🏗️</div>
+      <div>
+        <div class="concept-title">Layout Components &amp; Outlet</div>
+        <div class="concept-subtitle">Share Navbar/Footer across pages using React Router's nested routes</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p>A <strong>Layout component</strong> is a wrapper that provides shared UI (Navbar, Footer, Toast) around page content. React Router's <strong><code>&lt;Outlet /&gt;</code></strong> is a placeholder — child routes render inside it. SpideyCafe has two layouts: <code>CustomerLayout</code> (with Navbar + Footer) and <code>AdminLayout</code> (with an admin-specific header). This means you never duplicate the Navbar code across every page.</p>
+      </div>
+
+      <div class="file-ref">src/layouts/CustomerLayout.jsx — layout with Outlet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">CustomerLayout.jsx — Layout + Outlet pattern</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">import</span> { <span class="var">Outlet</span> } <span class="kw">from</span> <span class="str">'react-router-dom'</span>;  <span class="cm">// ← the magic component</span>
+
+<span class="kw">export function</span> <span class="fn">CustomerLayout</span>() {
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div</span> <span class="attr">style</span>=<span class="str">{{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}</span><span class="jsx">&gt;</span>
+      <span class="jsx">&lt;PrototypeBanner /&gt;</span>     <span class="cm">{/* top of every customer page */}</span>
+      <span class="jsx">&lt;Navbar /&gt;</span>             <span class="cm">{/* navigation bar — rendered ONCE */}</span>
+
+      <span class="jsx">&lt;main</span> <span class="attr">style</span>=<span class="str">{{ flex: 1 }}</span><span class="jsx">&gt;</span>
+        <span class="jsx">&lt;Outlet /&gt;</span>           <span class="cm">{/* ← active page renders HERE (MenuPage, CartPage, etc.) */}</span>
+      <span class="jsx">&lt;/main&gt;</span>
+
+      <span class="jsx">&lt;footer&gt;</span>...<span class="jsx">&lt;/footer&gt;</span>  <span class="cm">{/* footer — rendered ONCE */}</span>
+      <span class="jsx">&lt;Toast /&gt;</span>             <span class="cm">{/* global toast — always available */}</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}
+
+<span class="cm">// In App.jsx, CustomerLayout wraps child routes:</span>
+<span class="cm">// &lt;Route element={&lt;CustomerLayout /&gt;}&gt;</span>
+<span class="cm">//   &lt;Route path="/menu" element={&lt;MenuPage /&gt;} /&gt;   ← renders in Outlet</span>
+<span class="cm">//   &lt;Route path="/cart" element={&lt;CartPage /&gt;} /&gt;   ← renders in Outlet</span>
+<span class="cm">// &lt;/Route&gt;</span></pre>
+      </div>
+
+      <h3>AdminLayout — Different Layout, Same Pattern</h3>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">AdminLayout.jsx — custom admin header</span>
+          <span class="code-lang">JSX</span>
+        </div>
+        <pre><span class="kw">export function</span> <span class="fn">AdminLayout</span>() {
+  <span class="cm">// Admin layout accesses Context directly (not via CustomerLayout)</span>
+  <span class="kw">const</span> { simulateIncomingOrder, refreshOrders } = <span class="fn">useOrderContext</span>();
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div&gt;</span>
+      <span class="jsx">&lt;header</span> <span class="attr">style</span>=<span class="str">{{ backgroundColor: 'var(--brand-espresso)', position: 'sticky', top: 0 }}</span><span class="jsx">&gt;</span>
+        <span class="cm">{/* Admin-specific header with Simulate &amp; Refresh buttons */}</span>
+        <span class="jsx">&lt;button</span> <span class="attr">onClick</span>={simulateIncomingOrder}<span class="jsx">&gt;</span>Simulate Incoming Order<span class="jsx">&lt;/button&gt;</span>
+        <span class="jsx">&lt;button</span> <span class="attr">onClick</span>={refreshOrders}<span class="jsx">&gt;</span>Refresh<span class="jsx">&lt;/button&gt;</span>
+      <span class="jsx">&lt;/header&gt;</span>
+
+      <span class="jsx">&lt;main&gt;</span>
+        <span class="jsx">&lt;Outlet /&gt;</span>  <span class="cm">{/* AdminDashboardPage renders here */}</span>
+      <span class="jsx">&lt;/main&gt;</span>
+      <span class="jsx">&lt;Toast /&gt;</span>
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}</pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Understand why <code>Navbar</code> appears on all customer pages but NOT on the admin page</li>
+          <li>Add a simple "Breadcrumb" component to <code>CustomerLayout</code> that shows the current page path</li>
+          <li>Hint: use <code>useLocation()</code> from React Router inside the breadcrumb</li>
+          <li>Show: "Home > Menu" when on /menu, "Home > Cart" when on /cart</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     CHAPTER 15 — localStorage
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Chapter 15 — Level: Pro</div>
+  <h2>localStorage Persistence &amp; Lazy State Initialization</h2>
+  <div class="chapter-meta">
+    <span class="level-badge level-pro">Pro</span>
+  </div>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">💾</div>
+      <div>
+        <div class="concept-title">localStorage + Lazy useState</div>
+        <div class="concept-subtitle">Persist data across page refreshes — the cart survives browser reload!</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="definition">
+        <div class="definition-label">Definition</div>
+        <p><strong>localStorage</strong> is a browser API that stores key-value pairs permanently (until cleared). React state is lost on page reload — but by combining <code>useState</code> with localStorage, you get persistence. The <strong>lazy initializer</strong> pattern (<code>useState(() => getFromStorage())</code>) reads from localStorage only once on mount, avoiding redundant reads. SpideyCafe persists the cart, order list, and table number this way — refresh the page and your cart is still there!</p>
+      </div>
+
+      <div class="file-ref">src/services/storageService.js + src/context/OrderContext.jsx</div>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-filename">storageService.js — safe localStorage wrapper</span>
+          <span class="code-lang">JS</span>
+        </div>
+        <pre><span class="cm">// Safe wrappers that handle JSON parsing errors gracefully</span>
+<span class="kw">export const</span> STORAGE_KEYS = {
+  CART:   <span class="str">'brew_bite_cart'</span>,
+  ORDERS: <span class="str">'brew_bite_orders'</span>,
+  TABLE:  <span class="str">'brew_bite_current_table'</span>,
+};
+
+<span class="kw">export function</span> <span class="fn">getStoredItem</span>(key, defaultValue) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> item = window.localStorage.<span class="fn">getItem</span>(key);
+    <span class="kw">if</span> (!item) <span class="kw">return</span> defaultValue;
+    <span class="kw">return</span> <span class="fn">JSON.parse</span>(item);      <span class="cm">// ← parse JSON string back to object</span>
+  } <span class="kw">catch</span> (error) {
+    console.<span class="fn">error</span>(<span class="str">`Error reading "${key}" from localStorage`</span>, error);
+    <span class="kw">return</span> defaultValue;          <span class="cm">// ← fail gracefully</span>
+  }
+}
+
+<span class="kw">export function</span> <span class="fn">setStoredItem</span>(key, value) {
+  <span class="kw">try</span> {
+    window.localStorage.<span class="fn">setItem</span>(key, <span class="fn">JSON.stringify</span>(value));  <span class="cm">// ← serialize to JSON</span>
+  } <span class="kw">catch</span> (error) {
+    console.<span class="fn">error</span>(error);
+  }
+}
+
+<span class="cm">// ── OrderContext.jsx — Lazy State Initialization ─────────────</span>
+<span class="cm">// The function form of useState — runs ONCE to get initial value</span>
+<span class="kw">const</span> [cartItems, setCartItems] = <span class="hook">useState</span>(() => {
+  <span class="kw">return</span> <span class="fn">getStoredItem</span>(STORAGE_KEYS.CART, []);  <span class="cm">// ← read from localStorage on init</span>
+});
+<span class="cm">//                                 ↑</span>
+<span class="cm">// Passing a FUNCTION to useState means:</span>
+<span class="cm">// "call this function once to get the initial value"</span>
+<span class="cm">// vs useState([]) which would just set an empty array always</span>
+
+<span class="cm">// Sync cart to localStorage whenever it changes</span>
+<span class="hook">useEffect</span>(() => {
+  <span class="fn">setStoredItem</span>(STORAGE_KEYS.CART, cartItems);
+}, [cartItems]);
+<span class="cm">// Every time user adds/removes items → localStorage updates automatically</span></pre>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Practice Exercise</div>
+        <ol>
+          <li>Add 2-3 items to the café cart in your browser</li>
+          <li>Open DevTools → Application → Local Storage → see <code>brew_bite_cart</code></li>
+          <li>Refresh the page — your cart is still there! That's lazy useState + useEffect</li>
+          <li>Add a "last visited" feature: save <code>Date.now()</code> to localStorage key <code>last_visit</code> using <code>useEffect</code> with empty deps in <code>CustomerLayout</code></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────────────
+     LEARNING ROADMAP
+─────────────────────────────────────────── -->
+<div class="chapter">
+  <div class="chapter-number">Final Section</div>
+  <h2>Your Learning Roadmap — What to Build Next</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="concept">
+    <div class="concept-header">
+      <div class="concept-icon">🗺️</div>
+      <div>
+        <div class="concept-title">Build It Yourself — Step by Step</div>
+        <div class="concept-subtitle">Now that you've learned every concept, here's how to build SpideyCafe from scratch</div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="roadmap">
+        <div class="roadmap-item">
+          <h4>Week 1 — Fundamentals (Chapters 1–4)</h4>
+          <p>Set up Vite + React. Create the VegBadge, MenuItemCard with static data. Learn JSX, props, and useState with a simple counter.</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Week 2 — Dynamic UI (Chapters 5–8)</h4>
+          <p>Add useEffect to fetch menu from a JSON file. Implement search filtering, category filtering, conditional rendering for empty/loading states.</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Week 3 — Multi-Page App (Chapter 9)</h4>
+          <p>Install react-router-dom. Create 5 routes. Add Link navigation. Use useParams for order confirmation page. Build layouts with Outlet.</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Week 4 — Global State (Chapters 10–11)</h4>
+          <p>Create OrderContext with cart state. Lift cart logic into context. Build useCart and useOrders hooks. The "Add to Cart" now works across pages.</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Week 5 — Pro Patterns (Chapters 12–15)</h4>
+          <p>Add useCallback to all context functions. Build service layer. Add localStorage persistence. Create the admin dashboard with order status management.</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Week 6+ — Connect Real Backend</h4>
+          <p>Set USE_MOCK_DATA=false in apiConfig.js. Connect to the ASP.NET Core API. Add authentication, real-time updates, payment integration.</p>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <div class="key-points-title">🚀 Concepts Covered in This Guide</div>
+        <ul>
+          <li>JSX — writing HTML in JavaScript</li>
+          <li>Function Components — building block of React</li>
+          <li>Props — parent → child data flow</li>
+          <li>useState — component memory &amp; re-renders</li>
+          <li>useEffect — side effects, API calls, lifecycle</li>
+          <li>Event handling — forms, validation, controlled inputs</li>
+          <li>Conditional rendering — ternary, &&, early return</li>
+          <li>List rendering — .map() with keys</li>
+          <li>React Router v7 — routing, params, navigation</li>
+          <li>Context API — global state, avoiding prop drilling</li>
+          <li>Custom Hooks — extracting &amp; reusing logic</li>
+          <li>useCallback — memoizing functions</li>
+          <li>Service Layer — separating data from UI</li>
+          <li>localStorage + Lazy useState — persistence</li>
+          <li>Layouts + Outlet — shared UI structure</li>
+        </ul>
+      </div>
+
+      <div style="background: linear-gradient(135deg, var(--espresso), #4A2F20); color: #fff; border-radius: 16px; padding: 2rem; text-align: center; margin-top: 2rem;">
+        <div style="font-size: 2rem; margin-bottom: 0.75rem;">☕</div>
+        <h3 style="font-size: 1.3rem; font-family: 'Playfair Display', serif; color: #FFD700; margin-bottom: 0.5rem;">You've Got This!</h3>
+        <p style="font-size: 0.9rem; opacity: 0.85; max-width: 500px; margin: 0 auto;">
+          Every concept in this guide comes directly from a working, production-quality React application. 
+          The best way to learn is to read the code, break things, fix them, and add your own features. 
+          Open the project, run <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">npm run dev</code>, and start building!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div> <!-- end .main -->
+
+</body>
+</html>

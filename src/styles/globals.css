@@ -1,0 +1,203 @@
+:root {
+  --bg-primary: #FAF7F2;
+  --bg-secondary: #F4EFE6;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FDFBF7;
+  
+  --text-primary: #2A1B16;
+  --text-secondary: #6B5B54;
+  --text-muted: #9E8E85;
+  --text-light: #FAF7F2;
+
+  --brand-terracotta: #D96136;
+  --brand-terracotta-hover: #C45127;
+  --brand-espresso: #3D2314;
+  --brand-amber: #E29578;
+  --brand-cream: #FFFDF9;
+
+  --border-color: #EFE8DD;
+  --border-focus: #D96136;
+
+  --status-new-text: #1E40AF;
+  --status-new-bg: #EFF6FF;
+  --status-new-border: #BFDBFE;
+
+  --status-prep-text: #B45309;
+  --status-prep-bg: #FEF3C7;
+  --status-prep-border: #FDE68A;
+
+  --status-ready-text: #047857;
+  --status-ready-bg: #D1FAE5;
+  --status-ready-border: #A7F3D0;
+
+  --status-served-text: #374151;
+  --status-served-bg: #F3F4F6;
+  --status-served-border: #E5E7EB;
+
+  --status-cancel-text: #B91C1C;
+  --status-cancel-bg: #FEE2E2;
+  --status-cancel-border: #FCA5A5;
+
+  --shadow-sm: 0 2px 6px rgba(42, 27, 22, 0.04);
+  --shadow-md: 0 4px 16px rgba(42, 27, 22, 0.07);
+  --shadow-lg: 0 10px 30px rgba(42, 27, 22, 0.12);
+  --shadow-sticky: 0 -4px 20px rgba(42, 27, 22, 0.08);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: #D9CFC4;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #BFAEA0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 97, 54, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(217, 97, 54, 0); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.btn-primary {
+  background-color: var(--brand-terracotta);
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(217, 97, 54, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-terracotta-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(217, 97, 54, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #EBE3D5;
+  color: var(--brand-espresso);
+}
+
+.btn-outline {
+  border: 1.5px solid var(--brand-terracotta);
+  color: var(--brand-terracotta);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-outline:hover {
+  background-color: rgba(217, 97, 54, 0.08);
+}
